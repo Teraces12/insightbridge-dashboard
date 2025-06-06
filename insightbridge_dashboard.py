@@ -98,15 +98,28 @@ st.markdown('''
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
 # Metric selection
-metric = st.selectbox("Select a Metric:", sorted(df['metric_name'].unique()))
+metric_options = sorted(df['metric_name'].dropna().unique())
+metric = st.selectbox("Select a Metric:", metric_options)
 
 # Show available years for user awareness
-year_range = df[df['metric_name'] == metric]['year'].unique()
+year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
 st.caption(f"📅 Available Years: {', '.join(map(str, sorted(year_range)))}")
 
-# Filters
-sex = st.selectbox("Select Sex:", sorted(df['sex'].unique()))
-race = st.selectbox("Select Race/Ethnicity:", sorted(df['race_ethnicity'].unique()))
+# Safely populate sex options
+if 'sex' in df.columns:
+    sex_options = sorted(df['sex'].dropna().unique())
+    sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
+else:
+    st.error("❌ Column 'sex' is missing from the dataset.")
+    st.stop()
+
+# Safely populate race options
+if 'race_ethnicity' in df.columns:
+    race_options = sorted(df['race_ethnicity'].dropna().unique())
+    race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
+else:
+    st.error("❌ Column 'race_ethnicity' is missing from the dataset.")
+    st.stop()
 
 # Filtered data
 filtered = df[df['metric_name'] == metric]
@@ -117,6 +130,7 @@ trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 
 if trend.empty:
     st.warning("⚠️ No data available for this metric across any group. Please try another metric.")
+
 elif len(trend) == 1:
     one_year = trend['year'].iloc[0]
     st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
@@ -164,6 +178,7 @@ else:
     ax.grid(True)
     st.pyplot(fig)
 
+    # Insight message
     if len(detailed_trend) > 1:
         change = ((detailed_trend['metric_value'].iloc[-1] - detailed_trend['metric_value'].iloc[0]) /
                   detailed_trend['metric_value'].iloc[0]) * 100
