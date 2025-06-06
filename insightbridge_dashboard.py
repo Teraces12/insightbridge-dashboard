@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -22,6 +21,36 @@ def load_data():
 
 df = load_data()
 
+# --- Branding and Landing Section ---
+st.markdown("""
+    <div style="text-align: center; padding: 1em;">
+        <h1 style="font-size: 3em; color: #4CAF50;">📊 InsightBridge: Health & Poverty Analytics</h1>
+        <p style="font-size: 1.2em;">
+            A public dashboard for exploring health disparities across demographics.
+        </p>
+        <p style="font-size: 1.1em; color: #666;">
+            Built by <strong>Lebede Ngartera</strong> – Founder of <strong>TeraSystemAI</strong>
+        </p>
+    </div>
+""", unsafe_allow_html=True)
+
+# --- Hire Me / Contact Section ---
+st.markdown("""
+    <div style="text-align: center; margin-top: 1.5em;">
+        <a href="mailto:lebede.ngartera@example.com" target="_blank">
+            <button style="padding:10px 25px;font-size:16px;background:#0072C6;color:white;border:none;border-radius:5px;">
+                📬 Contact Me
+            </button>
+        </a>
+        <a href="https://www.linkedin.com/in/lebede-ngartera" target="_blank">
+            <button style="padding:10px 25px;font-size:16px;background:#0A66C2;color:white;border:none;border-radius:5px; margin-left:10px;">
+                💼 Hire Me on LinkedIn
+            </button>
+        </a>
+    </div>
+""", unsafe_allow_html=True)
+
+# Dashboard Title
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
 # Metric selection
