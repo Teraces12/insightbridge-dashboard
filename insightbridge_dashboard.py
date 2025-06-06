@@ -3,15 +3,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load your dataset
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def load_data():
     file_path = "health_of_the_city.csv"
-    df = pd.read_csv(file_path)
+    try:
+        df = pd.read_csv(file_path)
+    except FileNotFoundError:
+        st.error("❌ Dataset not found. Please ensure 'health_of_the_city.csv' is in the same directory.")
+        st.stop()
+
     essential_columns = [
         'year', 'sex', 'race_ethnicity', 'age_category',
         'metric_name', 'metric_value', 'lower_bound', 'upper_bound',
         'source', 'category'
     ]
+
     df = df[essential_columns].dropna()
     df['year'] = df['year'].astype(str).str.extract(r'(\d{4})')
     df['year'] = pd.to_numeric(df['year'], errors='coerce')
@@ -19,6 +25,7 @@ def load_data():
     df['year'] = df['year'].astype(int)
     return df
 
+# Load cleaned data
 df = load_data()
 
 # --- Branding and Landing Section ---
@@ -87,7 +94,7 @@ filtered = df[
 ]
 
 if filtered.empty:
-    st.warning("No data available for this selection.")
+    st.warning("⚠️ No data available for this selection. Please try different filters.")
 else:
     trend = filtered.groupby('year')['metric_value'].mean().reset_index()
     trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
@@ -108,4 +115,4 @@ else:
         st.success(f"📈 Insight: From {trend['year'].iloc[0]} to {trend['year'].iloc[-1]}, "
                    f"{metric.replace('_', ' ')} for {race}, {sex} changed by {change:.1f}%.")
     else:
-        st.info("Only one year of data available.")
+        st.info("ℹ️ Only one year of data available.")
