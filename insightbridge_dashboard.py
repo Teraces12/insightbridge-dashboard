@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load your dataset from GitHub raw URL
+# Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
-    file_path = "https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/health_of_the_city.csv"
+    file_path = "health_of_the_city.csv"
     try:
         df = pd.read_csv(file_path)
-    except Exception as e:
-        st.error(f"❌ Failed to load dataset from GitHub. Error: {e}")
+    except FileNotFoundError:
+        st.error("❌ Dataset not found. Please ensure 'health_of_the_city.csv' is in the same directory.")
         st.stop()
 
     essential_columns = [
@@ -24,7 +24,6 @@ def load_data():
     df = df.dropna(subset=['year'])
     df['year'] = df['year'].astype(int)
     return df
-
 # Load cleaned data
 df = load_data()
 
