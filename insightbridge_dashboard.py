@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 # Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
-    file_path = "health_of_the_city.csv"
+    file_path = "https://raw.githubusercontent.com/YourUsername/insightbridge-dashboard/main/health_of_the_city.csv"
+
     try:
         df = pd.read_csv(file_path)
     except FileNotFoundError:
