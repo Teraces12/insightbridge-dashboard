@@ -138,6 +138,17 @@ if metric.startswith("age_adjusted_mortality") or "mortality" in metric:
 # Debug output
 st.write("📊 Trend Preview:", trend)
 
+# 🔹 Add a bar chart of trend values per year
+st.subheader("📈 Yearly Trend (Bar Chart)")
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
+ax.set_xlabel("Metric Value")
+ax.set_ylabel("Year")
+ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
+ax.invert_yaxis()  # Show latest year at top
+st.pyplot(fig)
+
+# Handle single-year group comparison
 if len(trend) == 1:
     one_year = trend['year'].iloc[0]
 
