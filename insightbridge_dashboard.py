@@ -122,11 +122,14 @@ trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 # Show the trend table
 st.write("📊 Trend Preview:", trend)
 
-# Extract all available years with data
-year_window = sorted(trend['year'].dropna().unique())
+# Extract years between 2019–2022 with data
+year_window = [int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022]
 
 if year_window:
-    st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
+    if len(year_window) > 1:
+        st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
+    else:
+        st.info(f"ℹ️ Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]} only (no additional years from 2019–2022).")
 
     for year in year_window:
         yearly_data = filtered[filtered['year'] == year]
@@ -147,3 +150,16 @@ if year_window:
 
         csv = comparison_data.to_csv(index=False).encode('utf-8')
         st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
+
+else:
+    st.subheader("📈 Yearly Trend (Bar Chart)")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
+    ax.set_xlabel("Metric Value")
+    ax.set_ylabel("Year")
+    ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
+    ax.invert_yaxis()
+    st.pyplot(fig)
+
+    csv = trend.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
