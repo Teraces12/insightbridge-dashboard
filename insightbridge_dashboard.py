@@ -58,7 +58,6 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-
 # --- Hire Me / Contact Section ---
 st.markdown('''
 <div style="text-align: center; margin-top: 1.5em;">
@@ -103,23 +102,15 @@ metric = st.selectbox("Select a Metric:", metric_options)
 
 # Show available years for user awareness
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"📅 Available Years: {', '.join(map(str, sorted(year_range)))}")
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
 
 # Safely populate sex options
-if 'sex' in df.columns:
-    sex_options = sorted(df['sex'].dropna().unique())
-    sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
-else:
-    st.error("❌ Column 'sex' is missing from the dataset.")
-    st.stop()
+sex_options = sorted(df['sex'].dropna().unique())
+sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
 
 # Safely populate race options
-if 'race_ethnicity' in df.columns:
-    race_options = sorted(df['race_ethnicity'].dropna().unique())
-    race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
-else:
-    st.error("❌ Column 'race_ethnicity' is missing from the dataset.")
-    st.stop()
+race_options = sorted(df['race_ethnicity'].dropna().unique())
+race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
 
 # Filter by metric
 filtered = df[df['metric_name'] == metric]
@@ -136,22 +127,20 @@ available_years = sorted(filtered['year'].unique())
 year_window = [year for year in available_years if 2019 <= year <= 2022]
 
 if len(trend) == 1:
-    # === Only one year of data ===
+    # Only one year
     one_year = trend['year'].iloc[0]
-
     st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
 
     comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
     comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
-    comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
+    comparison_data = comparison_data.sort_values(by='metric_value')
 
     st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
     fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
     bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
     for bar in bars:
         width = bar.get_width()
-        ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
-                f'{width:.1f}', va='center', fontsize=9, color='black')
+        ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2, f'{width:.1f}', va='center')
     ax.set_xlabel("Metric Value")
     ax.set_ylabel("Demographic Group")
     ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
@@ -161,22 +150,20 @@ if len(trend) == 1:
     st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
 
 elif year_window:
-    # === Group comparison over multiple years ===
     st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {year_window[0]} to {year_window[-1]}.")
 
     for year in year_window:
         yearly_data = filtered[filtered['year'] == year]
         comparison_data = yearly_data.groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
         comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
-        comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
+        comparison_data = comparison_data.sort_values(by='metric_value')
 
         st.subheader(f"📊 Group Comparison - {year}")
         fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
         bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
         for bar in bars:
             width = bar.get_width()
-            ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
-                    f'{width:.1f}', va='center', fontsize=9, color='black')
+            ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2, f'{width:.1f}', va='center')
         ax.set_xlabel("Metric Value")
         ax.set_ylabel("Demographic Group")
         ax.set_title(f"{metric.replace('_', ' ').title()} in {year}")
@@ -186,7 +173,6 @@ elif year_window:
         st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
 
 else:
-    # === Multi-year trend chart ===
     st.subheader("📈 Yearly Trend (Bar Chart)")
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
