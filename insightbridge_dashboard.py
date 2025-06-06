@@ -92,7 +92,7 @@ st.markdown('''
 📩 *Open to collaborations, consulting, research, or new opportunities.*
 
 ---
-''')
+''', unsafe_allow_html=True)
 
 # Dashboard Title
 st.title("📊 InsightBridge: Health Trends Dashboard")
