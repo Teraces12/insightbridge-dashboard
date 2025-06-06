@@ -100,7 +100,25 @@ trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 if trend.empty:
     st.warning("⚠️ No data available for this metric across any group. Please try another metric.")
 elif len(trend) == 1:
-    st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}'. Try broader filters or check back later.")
+    one_year = trend['year'].iloc[0]
+    st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
+
+    # Group comparison chart for the one year
+    comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
+    comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
+
+    st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='skyblue')
+    ax.set_xlabel("Metric Value")
+    ax.set_ylabel("Demographic Group")
+    ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
+    st.pyplot(fig)
+
+    # Optional: download button for this data
+    csv = comparison_data.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
+
 else:
     detailed_filtered = filtered[(filtered['sex'] == sex) & (filtered['race_ethnicity'] == race)]
     detailed_trend = detailed_filtered.groupby('year')['metric_value'].mean().reset_index()
