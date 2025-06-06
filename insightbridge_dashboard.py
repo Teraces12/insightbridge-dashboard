@@ -121,39 +121,23 @@ else:
     st.error("❌ Column 'race_ethnicity' is missing from the dataset.")
     st.stop()
 
-# Filtered data
+# Filter by metric
 filtered = df[df['metric_name'] == metric]
+filtered = filtered[filtered['metric_value'].notna() & (filtered['metric_value'] > 0)]
 
-# Handle known issues: mortality might include invalid values
-filtered = filtered[filtered['metric_value'].notna()]
-filtered = filtered[filtered['metric_value'] > 0]
-
-# Check trend across all groups first
+# Get overall yearly trend
 trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 
-# Optionally trim extreme outliers if known (adjust based on data scale)
-if metric.startswith("age_adjusted_mortality") or "mortality" in metric:
-    trend = trend[trend['metric_value'] < 1000]  # assuming per 100k rate
-
-# Debug output
+# Show the trend table
 st.write("📊 Trend Preview:", trend)
 
-# 🔹 Add a bar chart of trend values per year
-st.subheader("📈 Yearly Trend (Bar Chart)")
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
-ax.set_xlabel("Metric Value")
-ax.set_ylabel("Year")
-ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
-ax.invert_yaxis()  # Show latest year at top
-st.pyplot(fig)
-
-# Handle single-year group comparison
 if len(trend) == 1:
+    # === Only one year of data ===
     one_year = trend['year'].iloc[0]
 
     st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
 
+    # Group comparison plot
     comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
     comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
     comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
@@ -161,16 +145,30 @@ if len(trend) == 1:
     st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
     fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
     bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
-
     for bar in bars:
         width = bar.get_width()
         ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
                 f'{width:.1f}', va='center', fontsize=9, color='black')
-
     ax.set_xlabel("Metric Value")
     ax.set_ylabel("Demographic Group")
     ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
     st.pyplot(fig)
 
+    # Download comparison
     csv = comparison_data.to_csv(index=False).encode('utf-8')
     st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
+
+else:
+    # === Multiple years available: show chart ===
+    st.subheader("📈 Yearly Trend (Bar Chart)")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
+    ax.set_xlabel("Metric Value")
+    ax.set_ylabel("Year")
+    ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
+    ax.invert_yaxis()
+    st.pyplot(fig)
+
+    # Download trend data
+    csv = trend.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
