@@ -35,7 +35,15 @@ def load_data():
 
     return df
 
-
+# --- Safe Data Initialization ---
+try:
+    df = load_data()
+    if df is None or df.empty:
+        st.error("❌ Dataset loaded but is empty after filtering. Please check your CSV content or cleaning rules.")
+        st.stop()
+except Exception as e:
+    st.error(f"❌ Data loading failed: {e}")
+    st.stop()
 
 # --- Branding and Landing Section ---
 st.markdown('''
@@ -49,6 +57,7 @@ st.markdown('''
     </p>
 </div>
 ''', unsafe_allow_html=True)
+
 
 # --- Hire Me / Contact Section ---
 st.markdown('''
