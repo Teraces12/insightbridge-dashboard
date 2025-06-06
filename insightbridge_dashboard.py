@@ -158,17 +158,6 @@ ax.set_ylabel("Demographic Group")
 ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
 st.pyplot(fig)
 
-
-
-    # Insight message
-    if len(detailed_trend) > 1:
-        change = ((detailed_trend['metric_value'].iloc[-1] - detailed_trend['metric_value'].iloc[0]) /
-                  detailed_trend['metric_value'].iloc[0]) * 100
-        st.success(f"📈 Insight: From {detailed_trend['year'].iloc[0]} to {detailed_trend['year'].iloc[-1]}, "
-                   f"{metric.replace('_', ' ')} for {title_suffix} changed by {change:.1f}%.")
-    else:
-        st.info(f"ℹ️ Only one year of data available for {title_suffix}.")
-
-    # Download button
-    csv = detailed_trend.to_csv(index=False).encode('utf-8')
-    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
+# Optional: download button for this data
+csv = comparison_data.to_csv(index=False).encode('utf-8')
+st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
