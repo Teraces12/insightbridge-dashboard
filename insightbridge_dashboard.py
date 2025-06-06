@@ -82,14 +82,18 @@ st.title("📊 InsightBridge: Health Trends Dashboard")
 # Metric selection
 metric = st.selectbox("Select a Metric:", sorted(df['metric_name'].unique()))
 
+# Show available years for user awareness
+year_range = df[df['metric_name'] == metric]['year'].unique()
+st.caption(f"📅 Available Years: {', '.join(map(str, sorted(year_range)))}")
+
 # Filters
 sex = st.selectbox("Select Sex:", sorted(df['sex'].unique()))
 race = st.selectbox("Select Race/Ethnicity:", sorted(df['race_ethnicity'].unique()))
 
 # Filtered data
-filtered = df[(df['metric_name'] == metric)]
+filtered = df[df['metric_name'] == metric]
 
-# Check if there's more than one year of data across all groups
+# Check trend across all groups first
 trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 
@@ -98,10 +102,18 @@ if trend.empty:
 elif len(trend) == 1:
     st.info("ℹ️ Only one year of data available. Try selecting broader filters or check back for updates.")
 else:
-    # Further narrow filter if desired
     detailed_filtered = filtered[(filtered['sex'] == sex) & (filtered['race_ethnicity'] == race)]
     detailed_trend = detailed_filtered.groupby('year')['metric_value'].mean().reset_index()
     detailed_trend = detailed_trend[(detailed_trend['metric_value'] > 0) & (detailed_trend['metric_value'] < 100000)]
+
+    # Debug info
+    st.write("🔎 Filtered Years:", detailed_trend['year'].unique())
+    st.write("📋 Sample Data:", detailed_trend.head())
+
+    # If not enough data, fallback to general trend
+    if detailed_trend.empty and len(trend) > 1:
+        st.warning("ℹ️ Not enough data for the selected sex and race. Showing overall trend instead.")
+        detailed_trend = trend
 
     # Plot
     fig, ax = plt.subplots()
