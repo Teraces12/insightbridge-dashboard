@@ -135,48 +135,29 @@ elif len(trend) == 1:
     one_year = trend['year'].iloc[0]
     st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
 
-    # Group comparison chart for the one year
-    comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
-    comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
+# Group comparison chart for the one year
+comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
+comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
 
-    st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='skyblue')
-    ax.set_xlabel("Metric Value")
-    ax.set_ylabel("Demographic Group")
-    ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
-    st.pyplot(fig)
+# Sort for better readability
+comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
 
-    # Optional: download button for this data
-    csv = comparison_data.to_csv(index=False).encode('utf-8')
-    st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
+st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
 
-else:
-    detailed_filtered = filtered[(filtered['sex'] == sex) & (filtered['race_ethnicity'] == race)]
-    detailed_trend = detailed_filtered.groupby('year')['metric_value'].mean().reset_index()
-    detailed_trend = detailed_trend[(detailed_trend['metric_value'] > 0) & (detailed_trend['metric_value'] < 100000)]
+fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
+bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
 
-    # Debug info toggle
-    if st.checkbox("🔍 Show Debug Info"):
-        st.write("🔎 Filtered Years:", detailed_trend['year'].unique())
-        st.write("📋 Sample Data:", detailed_trend.head())
+# Add text labels
+for bar in bars:
+    width = bar.get_width()
+    ax.text(width + 0.5, bar.get_y() + bar.get_height()/2,
+            f'{width:.1f}', va='center', fontsize=9, color='black')
 
-    # If not enough data, fallback to general trend
-    fallback = False
-    if detailed_trend.empty and len(trend) > 1:
-        st.warning("ℹ️ Not enough data for the selected sex and race. Showing overall trend instead.")
-        detailed_trend = trend
-        fallback = True
+ax.set_xlabel("Metric Value")
+ax.set_ylabel("Demographic Group")
+ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
+st.pyplot(fig)
 
-    # Plot
-    fig, ax = plt.subplots()
-    title_suffix = "All Groups (Fallback)" if fallback else f"{race}, {sex}"
-    ax.plot(detailed_trend['year'], detailed_trend['metric_value'], marker='o', color='blue')
-    ax.set_title(f"{metric.replace('_', ' ').title()} - {title_suffix}")
-    ax.set_xlabel("Year")
-    ax.set_ylabel("Metric Value")
-    ax.grid(True)
-    st.pyplot(fig)
 
     # Insight message
     if len(detailed_trend) > 1:
