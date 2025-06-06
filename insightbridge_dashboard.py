@@ -79,19 +79,45 @@ st.markdown('''
 ---
 
 ### 👤 Dr. **Lebede Ngartera**  
+**Independent Researcher, Upper Darby, United States**  
 **Founder, [TeraSystemAI](https://www.terasystems.ai)**  
 🧠 *AI & Data Strategist | Ph.D. in Mathematics*  
-🔍 *NLP, ML & LLMs Expert | Turning Data into Insight & Automation*  
+🔍 *NLP, ML & LLMs Expert | Turning Data into Insight & Automation* 
+
+💡 *This project is free and publicly available to empower better understanding of community health challenges.*  
+🙏 *Your support—whether through collaboration, partnership, funding, or sharing—is invaluable to our mission.*
 
 **📬 Connect With Me:**  
 - [🔗 LinkedIn](https://www.linkedin.com/in/lebede-ngartera-82429343/)  
 - [🔬 ResearchGate](https://www.researchgate.net/profile/L-Ngartera?ev=hdr_xprf)  
 - [💻 GitHub](https://github.com/Teraces12/skills-introduction-to-github)
 
-📩 *Open to collaborations, consulting, research, or new opportunities.*
+📩 *Open to collaborations, consulting, funding, academic exchange, or job opportunities.*
 
 ---
 ''', unsafe_allow_html=True)
+
+# --- Touch Heart Fund Message ---
+st.markdown('''
+### 💕 Touch a Heart, Fuel a Mission
+
+This project exists to illuminate health disparities, serve communities, and inspire equity.  
+Your contribution—no matter the amount—directly supports continued research, platform improvement, and actionable insight.
+
+**Your generosity turns data into change. Thank you for making a difference.** 🙏
+''')
+
+# --- Stripe Support Button ---
+st.markdown('''
+<div style="text-align: center; margin-top: 1em;">
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
+        <button style="padding:10px 25px;font-size:16px;background:#6772E5;color:white;border:none;border-radius:5px;">
+            💖 Support This Project via Stripe
+        </button>
+    </a>
+</div>
+''', unsafe_allow_html=True)
+
 
 # Dashboard Title
 st.title("📊 InsightBridge: Health Trends Dashboard")
