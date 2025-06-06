@@ -124,9 +124,19 @@ else:
 # Filtered data
 filtered = df[df['metric_name'] == metric]
 
+# Handle known issues: mortality might include invalid values
+filtered = filtered[filtered['metric_value'].notna()]
+filtered = filtered[filtered['metric_value'] > 0]
+
 # Check trend across all groups first
 trend = filtered.groupby('year')['metric_value'].mean().reset_index()
-trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
+
+# Optionally trim extreme outliers if known (adjust based on data scale)
+if metric.startswith("age_adjusted_mortality") or "mortality" in metric:
+    trend = trend[trend['metric_value'] < 1000]  # assuming per 100k rate
+
+# Debug output
+st.write("📊 Trend Preview:", trend)
 
 if len(trend) == 1:
     one_year = trend['year'].iloc[0]
@@ -135,16 +145,12 @@ if len(trend) == 1:
 
     comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
     comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
-
-    # Sort for readability
     comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
 
-    # Plot bar chart
     st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
     fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
     bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
 
-    # Add labels
     for bar in bars:
         width = bar.get_width()
         ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
@@ -155,7 +161,5 @@ if len(trend) == 1:
     ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
     st.pyplot(fig)
 
-    # Download
     csv = comparison_data.to_csv(index=False).encode('utf-8')
     st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
-
