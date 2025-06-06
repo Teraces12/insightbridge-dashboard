@@ -93,12 +93,14 @@ filtered = df[
     (df['race_ethnicity'] == race)
 ]
 
-if filtered.empty:
-    st.warning("⚠️ No data available for this selection. Please try different filters.")
-else:
-    trend = filtered.groupby('year')['metric_value'].mean().reset_index()
-    trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
+trend = filtered.groupby('year')['metric_value'].mean().reset_index()
+trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 
+if trend.empty:
+    st.warning("⚠️ No data available for this selection. Please try different filters.")
+elif len(trend) == 1:
+    st.info("ℹ️ Only one year of data available. Try selecting broader filters or check back for updates.")
+else:
     # Plot
     fig, ax = plt.subplots()
     ax.plot(trend['year'], trend['metric_value'], marker='o', color='blue')
@@ -109,10 +111,7 @@ else:
     st.pyplot(fig)
 
     # Insight
-    if len(trend) > 1:
-        change = ((trend['metric_value'].iloc[-1] - trend['metric_value'].iloc[0]) /
-                  trend['metric_value'].iloc[0]) * 100
-        st.success(f"📈 Insight: From {trend['year'].iloc[0]} to {trend['year'].iloc[-1]}, "
-                   f"{metric.replace('_', ' ')} for {race}, {sex} changed by {change:.1f}%.")
-    else:
-        st.info("ℹ️ Only one year of data available.")
+    change = ((trend['metric_value'].iloc[-1] - trend['metric_value'].iloc[0]) /
+              trend['metric_value'].iloc[0]) * 100
+    st.success(f"📈 Insight: From {trend['year'].iloc[0]} to {trend['year'].iloc[-1]}, "
+               f"{metric.replace('_', ' ')} for {race}, {sex} changed by {change:.1f}%.")
