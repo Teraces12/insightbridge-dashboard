@@ -150,13 +150,14 @@ bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color=
 # Add text labels
 for bar in bars:
     width = bar.get_width()
-    ax.text(width + 0.5, bar.get_y() + bar.get_height()/2,
+    ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
             f'{width:.1f}', va='center', fontsize=9, color='black')
 
 ax.set_xlabel("Metric Value")
 ax.set_ylabel("Demographic Group")
 ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
 st.pyplot(fig)
+
 
 
     # Insight message
