@@ -24,7 +24,7 @@ df = load_data()
 # --- Branding and Landing Section ---
 st.markdown("""
     <div style="text-align: center; padding: 1em;">
-        <h1 style="font-size: 3em; color: #4CAF50;">📊 InsightBridge: Health & Poverty Analytics</h1>
+        <h1 style="font-size: 3em; color: #4CAF50;">\ud83d\udcca InsightBridge: Health & Poverty Analytics</h1>
         <p style="font-size: 1.2em;">
             A public dashboard for exploring health disparities across demographics.
         </p>
@@ -39,19 +39,38 @@ st.markdown("""
     <div style="text-align: center; margin-top: 1.5em;">
         <a href="mailto:lebede.ngartera@example.com" target="_blank">
             <button style="padding:10px 25px;font-size:16px;background:#0072C6;color:white;border:none;border-radius:5px;">
-                📬 Contact Me
+                \ud83d\udcec Contact Me
             </button>
         </a>
-        <a href="https://www.linkedin.com/in/lebede-ngartera" target="_blank">
+        <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank">
             <button style="padding:10px 25px;font-size:16px;background:#0A66C2;color:white;border:none;border-radius:5px; margin-left:10px;">
-                💼 Hire Me on LinkedIn
+                \ud83d\udcbc Hire Me on LinkedIn
             </button>
         </a>
     </div>
 """, unsafe_allow_html=True)
 
+# --- Personal Branding Footer ---
+st.markdown("""
+---
+
+### \ud83d\udc64 Dr. **Lebede Ngartera**  
+**Founder, [TeraSystemAI](https://www.terasystems.ai)**  
+\ud83e\udde0 *AI & Data Strategist | Ph.D. in Mathematics*  
+\ud83d\udd0d *NLP, ML & LLMs Expert | Turning Data into Insight & Automation*  
+
+**\ud83d\udcec Connect With Me:**  
+- [\ud83d\udd17 LinkedIn](https://www.linkedin.com/in/lebede-ngartera-82429343/)  
+- [\ud83d\udd2c ResearchGate](https://www.researchgate.net/profile/L-Ngartera?ev=hdr_xprf)  
+- [\ud83d\udcbb GitHub](https://github.com/Teraces12/skills-introduction-to-github)
+
+\ud83d\udce9 *Open to collaborations, consulting, research, or new opportunities.*
+
+---
+""")
+
 # Dashboard Title
-st.title("📊 InsightBridge: Health Trends Dashboard")
+st.title("\ud83d\udcca InsightBridge: Health Trends Dashboard")
 
 # Metric selection
 metric = st.selectbox("Select a Metric:", sorted(df['metric_name'].unique()))
@@ -86,7 +105,7 @@ else:
     if len(trend) > 1:
         change = ((trend['metric_value'].iloc[-1] - trend['metric_value'].iloc[0]) /
                   trend['metric_value'].iloc[0]) * 100
-        st.success(f"📈 Insight: From {trend['year'].iloc[0]} to {trend['year'].iloc[-1]}, "
+        st.success(f"\ud83d\udcc8 Insight: From {trend['year'].iloc[0]} to {trend['year'].iloc[-1]}, "
                    f"{metric.replace('_', ' ')} for {race}, {sex} changed by {change:.1f}%.")
     else:
         st.info("Only one year of data available.")
