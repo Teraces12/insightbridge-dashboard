@@ -100,25 +100,29 @@ trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 if trend.empty:
     st.warning("⚠️ No data available for this metric across any group. Please try another metric.")
 elif len(trend) == 1:
-    st.info("ℹ️ Only one year of data available. Try selecting broader filters or check back for updates.")
+    st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}'. Try broader filters or check back later.")
 else:
     detailed_filtered = filtered[(filtered['sex'] == sex) & (filtered['race_ethnicity'] == race)]
     detailed_trend = detailed_filtered.groupby('year')['metric_value'].mean().reset_index()
     detailed_trend = detailed_trend[(detailed_trend['metric_value'] > 0) & (detailed_trend['metric_value'] < 100000)]
 
-    # Debug info
-    st.write("🔎 Filtered Years:", detailed_trend['year'].unique())
-    st.write("📋 Sample Data:", detailed_trend.head())
+    # Debug info toggle
+    if st.checkbox("🔍 Show Debug Info"):
+        st.write("🔎 Filtered Years:", detailed_trend['year'].unique())
+        st.write("📋 Sample Data:", detailed_trend.head())
 
     # If not enough data, fallback to general trend
+    fallback = False
     if detailed_trend.empty and len(trend) > 1:
         st.warning("ℹ️ Not enough data for the selected sex and race. Showing overall trend instead.")
         detailed_trend = trend
+        fallback = True
 
     # Plot
     fig, ax = plt.subplots()
+    title_suffix = "All Groups (Fallback)" if fallback else f"{race}, {sex}"
     ax.plot(detailed_trend['year'], detailed_trend['metric_value'], marker='o', color='blue')
-    ax.set_title(f"{metric.replace('_', ' ').title()} - {race}, {sex}")
+    ax.set_title(f"{metric.replace('_', ' ').title()} - {title_suffix}")
     ax.set_xlabel("Year")
     ax.set_ylabel("Metric Value")
     ax.grid(True)
@@ -128,6 +132,10 @@ else:
         change = ((detailed_trend['metric_value'].iloc[-1] - detailed_trend['metric_value'].iloc[0]) /
                   detailed_trend['metric_value'].iloc[0]) * 100
         st.success(f"📈 Insight: From {detailed_trend['year'].iloc[0]} to {detailed_trend['year'].iloc[-1]}, "
-                   f"{metric.replace('_', ' ')} for {race}, {sex} changed by {change:.1f}%.")
+                   f"{metric.replace('_', ' ')} for {title_suffix} changed by {change:.1f}%.")
     else:
-        st.info("ℹ️ Only one year of data available for this demographic.")
+        st.info(f"ℹ️ Only one year of data available for {title_suffix}.")
+
+    # Download button
+    csv = detailed_trend.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
