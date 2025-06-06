@@ -128,36 +128,34 @@ filtered = df[df['metric_name'] == metric]
 trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 trend = trend[(trend['metric_value'] > 0) & (trend['metric_value'] < 100000)]
 
-if trend.empty:
-    st.warning("⚠️ No data available for this metric across any group. Please try another metric.")
-
-elif len(trend) == 1:
+if len(trend) == 1:
     one_year = trend['year'].iloc[0]
+
     st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
 
-# Group comparison chart for the one year
-comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
-comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
+    comparison_data = filtered[filtered['year'] == one_year].groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
+    comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
 
-# Sort for better readability
-comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
+    # Sort for readability
+    comparison_data = comparison_data.sort_values(by='metric_value', ascending=True)
 
-st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
+    # Plot bar chart
+    st.subheader(f"📊 Group Comparison for {metric.replace('_', ' ').title()} ({one_year})")
+    fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
+    bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
 
-fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
-bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
+    # Add labels
+    for bar in bars:
+        width = bar.get_width()
+        ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
+                f'{width:.1f}', va='center', fontsize=9, color='black')
 
-# Add text labels
-for bar in bars:
-    width = bar.get_width()
-    ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2,
-            f'{width:.1f}', va='center', fontsize=9, color='black')
+    ax.set_xlabel("Metric Value")
+    ax.set_ylabel("Demographic Group")
+    ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
+    st.pyplot(fig)
 
-ax.set_xlabel("Metric Value")
-ax.set_ylabel("Demographic Group")
-ax.set_title(f"{metric.replace('_', ' ').title()} in {one_year}")
-st.pyplot(fig)
+    # Download
+    csv = comparison_data.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
 
-# Optional: download button for this data
-csv = comparison_data.to_csv(index=False).encode('utf-8')
-st.download_button("⬇️ Download Group Comparison", data=csv, file_name="group_comparison.csv", mime="text/csv")
