@@ -24,6 +24,7 @@ def load_data():
     df = df.dropna(subset=['year'])
     df['year'] = df['year'].astype(int)
     return df
+
 # Load cleaned data
 df = load_data()
 
