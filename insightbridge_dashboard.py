@@ -123,13 +123,13 @@ trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 st.write("📊 Trend Preview:", trend)
 
 # Extract years between 2019–2022 with data
-year_window = [int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022]
+year_window = sorted([int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022])
 
 if year_window:
-    if len(year_window) == 1:
-        st.info(f"📊 Showing group comparison for {metric.replace('_', ' ')} in {year_window[0]}.")
-    else:
+    if len(year_window) > 1:
         st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
+    else:
+        st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]} (no additional years from 2019–2022).")
 
     for year in year_window:
         yearly_data = filtered[filtered['year'] == year]
@@ -163,3 +163,4 @@ else:
 
     csv = trend.to_csv(index=False).encode('utf-8')
     st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
+
