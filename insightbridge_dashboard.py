@@ -123,11 +123,10 @@ trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 st.write("📊 Trend Preview:", trend)
 
 # Extract years between 2019–2022 with data
-year_window = [year for year in sorted(filtered['year'].dropna().unique()) if 2019 <= year <= 2022]
+year_window = [int(year) for year in trend['year'].unique() if 2019 <= year <= 2022]
 
 if year_window:
-    # ✅ Valid multiple years from 2019–2022
-    st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {year_window[0]} to {year_window[-1]}.")
+    st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
 
     for year in year_window:
         yearly_data = filtered[filtered['year'] == year]
