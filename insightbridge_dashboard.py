@@ -129,7 +129,8 @@ if year_window:
     if len(year_window) > 1:
         st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
     else:
-        st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]} (no additional years from 2019–2022).")
+       st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]}.")
+
 
     for year in year_window:
         yearly_data = filtered[filtered['year'] == year]
