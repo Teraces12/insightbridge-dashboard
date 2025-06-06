@@ -123,11 +123,10 @@ trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 st.write("📊 Trend Preview:", trend)
 
 # Extract years between 2019–2022 with data
-#available_years = sorted(filtered['year'].unique())
+available_years = sorted(filtered['year'].unique())
 year_window = [year for year in available_years if 2019 <= year <= 2022]
 
-if year_window:
-    # ✅ Valid multiple years from 2019–2022
+if len(year_window) >= 1:
     st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {year_window[0]} to {year_window[-1]}.")
 
     for year in year_window:
@@ -148,11 +147,9 @@ if year_window:
         ax.set_title(f"{metric.replace('_', ' ').title()} in {year}")
         st.pyplot(fig)
 
-        # Add per-year download
         csv = comparison_data.to_csv(index=False).encode('utf-8')
         st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
 
 else:
-    # ✅ Only fallback if there's truly just 1 year outside window
-    one_year = trend['year'].iloc[0]
-    st.info(f"ℹ️ Only one year of data available for '{metric.replace('_', ' ')}' in {one_year}. Showing group comparisons instead.")
+    st.warning("⚠️ No available data from 2019 to 2022 for this metric to show group comparisons.")
+
