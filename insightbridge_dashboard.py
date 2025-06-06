@@ -12,21 +12,29 @@ def load_data():
         st.error(f"❌ Failed to load dataset: {e}")
         st.stop()
 
+    # Only keep necessary columns that are present
     essential_columns = [
         'year', 'sex', 'race_ethnicity', 'age_category',
         'metric_name', 'metric_value', 'lower_bound', 'upper_bound',
         'source', 'category'
     ]
+    df = df[[col for col in essential_columns if col in df.columns]]
 
-    df = df[essential_columns].dropna()
+    # Fix year formatting
     df['year'] = df['year'].astype(str).str.extract(r'(\d{4})')
     df['year'] = pd.to_numeric(df['year'], errors='coerce')
     df = df.dropna(subset=['year'])
     df['year'] = df['year'].astype(int)
+
+    # Clean metric values
+    df = df[df['metric_value'].notna()]  # Only drop rows with missing values in metric_value
+    df = df[df['metric_value'] >= 0]     # Keep zero and positive values
+
+    # Optional: drop invalid ranges if needed
+    df = df[df['lower_bound'] > -99999]
+
     return df
 
-# Load cleaned data
-df = load_data()
 
 # --- Branding and Landing Section ---
 st.markdown('''
