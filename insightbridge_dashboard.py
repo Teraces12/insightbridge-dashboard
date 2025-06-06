@@ -145,10 +145,12 @@ if year_window:
         ax.set_title(f"{metric.replace('_', ' ').title()} in {year}")
         st.pyplot(fig)
 
+        # Download for each year
         csv = comparison_data.to_csv(index=False).encode('utf-8')
         st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
 
 else:
+    # Fall back if no data from 2019 to 2022
     st.subheader("📈 Yearly Trend (Bar Chart)")
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
