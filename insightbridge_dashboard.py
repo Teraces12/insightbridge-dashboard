@@ -9,31 +9,32 @@ def load_data():
     try:
         df = pd.read_csv(file_path)
     except Exception as e:
-        st.error(f"❌ Failed to load dataset: {e}")
-        st.stop()
+        raise RuntimeError(f"Could not read CSV file: {e}")
 
-    # Only keep necessary columns that are present
-    essential_columns = [
+    # Minimal columns check
+    expected_cols = [
         'year', 'sex', 'race_ethnicity', 'age_category',
         'metric_name', 'metric_value', 'lower_bound', 'upper_bound',
         'source', 'category'
     ]
-    df = df[[col for col in essential_columns if col in df.columns]]
+    available_cols = [col for col in expected_cols if col in df.columns]
+    if not available_cols:
+        raise ValueError("CSV is missing all required columns.")
 
-    # Fix year formatting
+    df = df[available_cols]
+
+    # Clean year field
     df['year'] = df['year'].astype(str).str.extract(r'(\d{4})')
     df['year'] = pd.to_numeric(df['year'], errors='coerce')
     df = df.dropna(subset=['year'])
     df['year'] = df['year'].astype(int)
 
     # Clean metric values
-    df = df[df['metric_value'].notna()]  # Only drop rows with missing values in metric_value
-    df = df[df['metric_value'] >= 0]     # Keep zero and positive values
-
-    # Optional: drop invalid ranges if needed
-    df = df[df['lower_bound'] > -99999]
+    df = df[df['metric_value'].notna()]
+    df = df[df['metric_value'] >= 0]
 
     return df
+
 
 
 # --- Branding and Landing Section ---
