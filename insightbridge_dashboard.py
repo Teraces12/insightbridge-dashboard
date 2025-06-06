@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 # Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
-    file_path = "https://raw.githubusercontent.com/YourUsername/insightbridge-dashboard/main/health_of_the_city.csv"
-
+    file_path = "https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/health_of_the_city.csv"
     try:
         df = pd.read_csv(file_path)
-    except FileNotFoundError:
-        st.error("❌ Dataset not found. Please ensure 'health_of_the_city.csv' is in the same directory.")
+    except Exception as e:
+        st.error(f"❌ Failed to load dataset: {e}")
         st.stop()
 
     essential_columns = [
