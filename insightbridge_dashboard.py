@@ -68,6 +68,8 @@ body::before {
   font-weight: bold;
   font-size: 3em;
   display: inline-block;
+  text-align: center;
+  width: 100%;
 }
 .marquee-container {
   width: 100%;
@@ -75,6 +77,7 @@ body::before {
   white-space: nowrap;
   box-sizing: border-box;
   margin-top: 1em;
+  text-align: center;
 }
 .marquee-text {
   display: inline-block;
