@@ -122,7 +122,7 @@ st.markdown('''
             💼 Hire Me on LinkedIn
         </button>
     </a>
-    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH" target="_blank">
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
         <button style="padding:10px 25px;font-size:16px;background:#e91e63;color:white;border:none;border-radius:5px; margin-left:10px;">
             💖 Support This Project via Stripe
         </button>
@@ -145,7 +145,7 @@ metric_options = sorted(df['metric_name'].dropna().unique(), key=lambda x: (metr
 metric = st.selectbox("Select a Metric:", metric_options)
 
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))})
 
 sex_options = sorted(df['sex'].dropna().unique())
 sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
