@@ -72,10 +72,14 @@ body::before {
   white-space: nowrap;
   box-sizing: border-box;
   animation: marquee 15s linear infinite;
-  font-size: 1.2em;
-  color: #333;
+  font-size: 1.3em;
+  font-weight: 500;
+  background: linear-gradient(to right, #ff4081, #42a5f5, #66bb6a, #ffa726, #ff4081);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-top: 1em;
 }
+
 @keyframes animateGradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
