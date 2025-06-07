@@ -42,4 +42,169 @@ except Exception as e:
 # --- Branding and Landing Section ---
 st.set_page_config(page_title="InsightBridge: Health & Poverty Analytics", layout="wide")
 
-st.mar
+st.markdown('''
+<style>
+body {
+  background-image: url("https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/background.png");
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: -1;
+}
+.gradient-text {
+  background: linear-gradient(270deg, #42a5f5, #66bb6a, #ffa726, #ab47bc);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animateGradient 6s ease infinite;
+  font-weight: bold;
+  font-size: 3em;
+  display: inline-block;
+}
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  margin-top: 1em;
+}
+.marquee-text {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+  font-size: 1.3em;
+  color: #ad1457;
+  font-weight: bold;
+}
+@keyframes animateGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+</style>
+<div class="gradient-text">InsightBridge: Health & Poverty Analytics</div>
+<p style="text-align:center; margin-top: 0.5em; font-size: 1.1em;">A public dashboard for exploring health disparities across demographics in Pennsylvania, US.</p>
+<p style="text-align:center; font-size: 1em;">Built by <strong>Lebede Ngartera</strong> – Founder of <a href="https://www.terasystems.ai" target="_blank">TeraSystemAI</a></p>
+<div class="marquee-container">
+  <div class="marquee-text">💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖</div>
+</div>
+''', unsafe_allow_html=True)
+
+st.markdown('''
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.5em;">
+    <a href="mailto:lebede@terasystems.ai" style="
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #0072C6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;">
+        📬 Contact Me
+    </a>
+    <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank" style="
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #0A66C2;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;">
+        💼 Hire Me on LinkedIn
+    </a>
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank" style="
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #e91e63;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;">
+        💖 Support via Stripe
+    </a>
+</div>
+''', unsafe_allow_html=True)
+
+st.title("📊 InsightBridge: Health Trends Dashboard")
+
+metric_order = [
+    "age_adjusted_mortality_rate_per_100k",
+    "asthma_related_ED_visits_rate_per_10k",
+    "count_annual_shooting_victims",
+    "years_of_potential_life_lost_to_age_75",
+    "count_syphilis_cases"
+]
+
+metric_options = sorted(df['metric_name'].dropna().unique(), key=lambda x: (metric_order.index(x) if x in metric_order else len(metric_order), x))
+
+metric = st.selectbox("Select a Metric:", metric_options)
+
+year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
+
+sex_options = sorted(df['sex'].dropna().unique())
+sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
+
+race_options = sorted(df['race_ethnicity'].dropna().unique())
+race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
+
+filtered = df[df['metric_name'] == metric]
+filtered = filtered[filtered['metric_value'].notna() & (filtered['metric_value'] > 0)]
+
+trend = filtered.groupby('year')['metric_value'].mean().reset_index()
+
+st.write("📊 Trend Preview:", trend)
+
+year_window = sorted([int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022])
+
+if year_window:
+    if len(year_window) > 1:
+        st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
+    else:
+        st.info(f"ℹ️ Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]} only (no additional years from 2019–2022).")
+
+    for year in year_window:
+        yearly_data = filtered[filtered['year'] == year]
+        comparison_data = yearly_data.groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
+        comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
+        comparison_data = comparison_data.sort_values(by='metric_value')
+
+        st.subheader(f"📊 Group Comparison - {year}")
+        fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
+        bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
+        for bar in bars:
+            width = bar.get_width()
+            ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2, f'{width:.1f}', va='center')
+        ax.set_xlabel("Metric Value")
+        ax.set_ylabel("Demographic Group")
+        ax.set_title(f"{metric.replace('_', ' ').title()} in {year}")
+        st.pyplot(fig)
+
+        csv = comparison_data.to_csv(index=False).encode('utf-8')
+        st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
+else:
+    st.subheader("📈 Yearly Trend (Bar Chart)")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
+    ax.set_xlabel("Metric Value")
+    ax.set_ylabel("Year")
+    ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
+    ax.invert_yaxis()
+    st.pyplot(fig)
+
+    csv = trend.to_csv(index=False).encode('utf-8')
+    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
