@@ -133,7 +133,6 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
 metric_order = [
@@ -149,7 +148,7 @@ metric_options = sorted(df['metric_name'].dropna().unique(), key=lambda x: (metr
 metric = st.selectbox("Select a Metric:", metric_options)
 
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))})
 
 sex_options = sorted(df['sex'].dropna().unique())
 sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
