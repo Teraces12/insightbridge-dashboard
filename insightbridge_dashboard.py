@@ -58,7 +58,7 @@ body::before {
   z-index: -1;
 }
 .gradient-text {
-  background: linear-gradient(270deg, #42a5f5, #66bb6a, #ffa726, #42a5f5);
+  background: linear-gradient(270deg, #42a5f5, #66bb6a, #ffa726, #ab47bc);
   background-size: 800% 800%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -71,15 +71,12 @@ body::before {
   overflow: hidden;
   white-space: nowrap;
   box-sizing: border-box;
-  animation: marquee 15s linear infinite;
+  animation: marquee 18s linear infinite;
   font-size: 1.3em;
-  font-weight: 500;
-  background: linear-gradient(to right, #ff4081, #42a5f5, #66bb6a, #ffa726, #ff4081);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #880e4f;
   margin-top: 1em;
+  font-weight: bold;
 }
-
 @keyframes animateGradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -130,6 +127,11 @@ st.markdown('''
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
 metric_options = sorted(df['metric_name'].dropna().unique())
+# Ensure the preferred metric appears first
+preferred_metric = "age_adjusted_mortality_rate_per_100k"
+if preferred_metric in metric_options:
+    metric_options.remove(preferred_metric)
+    metric_options.insert(0, preferred_metric)
 metric = st.selectbox("Select a Metric:", metric_options)
 
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
