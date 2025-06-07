@@ -20,12 +20,8 @@ st.markdown(f"""
 st.sidebar.title("🧠 Functions Overview")
 st.sidebar.markdown("""
 - `load_data()`: Load and preprocess the dataset
-- `metric`: Selected health indicator
-- `year_range`: Available years in the dataset
-- `sex`: Gender filter
-- `race`: Race/ethnicity filter
-- `filtered`: Filtered data by metric, sex, and race
-- `trend`: Aggregated data for visual trends
+- `initialize_dashboard()`: Run app logic and render visuals
+- `render_footer()`: Display project information and personal branding
 """)
 
 # Load your dataset
@@ -55,18 +51,19 @@ def load_data():
     df = df[df['metric_value'] >= 0]
     return df
 
-# Safe Data Initialization
-try:
-    df = load_data()
-    if df is None or df.empty:
-        st.error("❌ Dataset loaded but is empty after filtering. Please check your CSV content or cleaning rules.")
+def initialize_dashboard():
+    try:
+        df = load_data()
+        if df is None or df.empty:
+            st.error("❌ Dataset loaded but is empty after filtering. Please check your CSV content or cleaning rules.")
+            st.stop()
+    except Exception as e:
+        st.error(f"❌ Data loading failed: {e}")
         st.stop()
-except Exception as e:
-    st.error(f"❌ Data loading failed: {e}")
-    st.stop()
 
-# --- Personal Branding Footer ---
-st.markdown('''
+
+def render_footer():
+    st.markdown('''
 ---
 
 ### 👤 Dr. **Lebede Ngartera**  
@@ -147,18 +144,17 @@ def load_data():
     # Loads and filters the dataset
     pass
 
-# Constants used in the dashboard include:
-# - metric
-# - year_range
-# - sex
-# - race
-# - filtered
-# - trend
+def initialize_dashboard():
+    # Load data and handle UI
+    pass
+
+def render_footer():
+    # Footer with links and project info
+    pass
 ```
 ''')
 
-# --- Stripe Support Button (Fallback Included) ---
-st.markdown('''
+    st.markdown('''
 <div style="text-align: center; margin-top: 1em;">
     <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
         <button style="padding:10px 25px;font-size:16px;background:#6772E5;color:white;border:none;border-radius:5px;">
@@ -168,5 +164,8 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# Optional plain text fallback for environments that don't support HTML buttons
-st.markdown('[💖 Click here to support this project via Stripe](https://buy.stripe.com/3cI9AS11N67I3W66IH04801)', unsafe_allow_html=True)
+    st.markdown('[💖 Click here to support this project via Stripe](https://buy.stripe.com/3cI9AS11N67I3W66IH04801)', unsafe_allow_html=True)
+
+# Execute the dashboard logic
+initialize_dashboard()
+render_footer()
