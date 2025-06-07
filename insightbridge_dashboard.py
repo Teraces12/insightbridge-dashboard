@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit as st
 
 # Load your dataset
 @st.cache_data(show_spinner=False)
@@ -12,7 +11,6 @@ def load_data():
     except Exception as e:
         raise RuntimeError(f"Could not read CSV file: {e}")
 
-    # Minimal columns check
     expected_cols = [
         'year', 'sex', 'race_ethnicity', 'age_category',
         'metric_name', 'metric_value', 'lower_bound', 'upper_bound',
@@ -23,20 +21,15 @@ def load_data():
         raise ValueError("CSV is missing all required columns.")
 
     df = df[available_cols]
-
-    # Clean year field
     df['year'] = df['year'].astype(str).str.extract(r'(\d{4})')
     df['year'] = pd.to_numeric(df['year'], errors='coerce')
     df = df.dropna(subset=['year'])
     df['year'] = df['year'].astype(int)
-
-    # Clean metric values
     df = df[df['metric_value'].notna()]
     df = df[df['metric_value'] >= 0]
-
     return df
 
-# --- Safe Data Initialization ---
+# Safe Data Initialization
 try:
     df = load_data()
     if df is None or df.empty:
@@ -48,8 +41,32 @@ except Exception as e:
 
 # --- Branding and Landing Section ---
 st.markdown('''
+<style>
+body {
+  background-image: url("https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/background.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+.gradient-text {
+  background: linear-gradient(to right, #42a5f5, #66bb6a, #ffa726);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animate 4s ease-in-out infinite;
+  font-weight: bold;
+  font-size: 36px;
+  display: inline-block;
+}
+@keyframes animate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+''', unsafe_allow_html=True)
+
+st.markdown('''
 <div style="text-align: center; padding: 1em;">
-    <h1 style="font-size: 3em; color: #4CAF50;">📊 InsightBridge: Health & Poverty Analytics</h1>
+    <h1 class="gradient-text">📊 InsightBridge: Health & Poverty Analytics</h1>
     <p style="font-size: 1.2em;">
         A public dashboard for exploring health disparities across demographics.
     </p>
@@ -59,7 +76,6 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# --- Hire Me / Contact Section ---
 st.markdown('''
 <div style="text-align: center; margin-top: 1.5em;">
     <a href="mailto:lebede.ngartera@example.com" target="_blank">
@@ -75,37 +91,27 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-
-# Dashboard Title
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
-# Metric selection
 metric_options = sorted(df['metric_name'].dropna().unique())
 metric = st.selectbox("Select a Metric:", metric_options)
 
-# Show available years for user awareness
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))})")
 
-# Safely populate sex options
 sex_options = sorted(df['sex'].dropna().unique())
 sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
 
-# Safely populate race options
 race_options = sorted(df['race_ethnicity'].dropna().unique())
 race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
 
-# Filter by metric
 filtered = df[df['metric_name'] == metric]
 filtered = filtered[filtered['metric_value'].notna() & (filtered['metric_value'] > 0)]
 
-# Get overall yearly trend
 trend = filtered.groupby('year')['metric_value'].mean().reset_index()
 
-# Show the trend table
 st.write("📊 Trend Preview:", trend)
 
-# Extract years between 2019–2022 with data
 year_window = sorted([int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022])
 
 if year_window:
@@ -133,7 +139,6 @@ if year_window:
 
         csv = comparison_data.to_csv(index=False).encode('utf-8')
         st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
-
 else:
     st.subheader("📈 Yearly Trend (Bar Chart)")
     fig, ax = plt.subplots(figsize=(8, 5))
