@@ -71,7 +71,7 @@ body::before {
   overflow: hidden;
   white-space: nowrap;
   box-sizing: border-box;
-  animation: marquee 18s linear infinite;
+  animation: marquee 25s linear infinite;
   font-size: 1.3em;
   color: #880e4f;
   margin-top: 1em;
@@ -127,7 +127,6 @@ st.markdown('''
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
 metric_options = sorted(df['metric_name'].dropna().unique())
-# Ensure the preferred metric appears first
 preferred_metric = "age_adjusted_mortality_rate_per_100k"
 if preferred_metric in metric_options:
     metric_options.remove(preferred_metric)
