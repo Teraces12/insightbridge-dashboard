@@ -67,10 +67,23 @@ body::before {
   font-size: 3em;
   display: inline-block;
 }
+.marquee-text {
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  animation: marquee 15s linear infinite;
+  font-size: 1.2em;
+  color: #333;
+  margin-top: 1em;
+}
 @keyframes animateGradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 </style>
 ''', unsafe_allow_html=True)
@@ -84,6 +97,9 @@ st.markdown('''
     <p style="font-size: 1.1em; color: #666;">
         Built by <strong>Lebede Ngartera</strong> – Founder of <strong>TeraSystemAI</strong>
     </p>
+    <div class="marquee-text">
+        💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖
+    </div>
 </div>
 ''', unsafe_allow_html=True)
 
@@ -97,6 +113,11 @@ st.markdown('''
     <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank">
         <button style="padding:10px 25px;font-size:16px;background:#0A66C2;color:white;border:none;border-radius:5px; margin-left:10px;">
             💼 Hire Me on LinkedIn
+        </button>
+    </a>
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
+        <button style="padding:10px 25px;font-size:16px;background:#e91e63;color:white;border:none;border-radius:5px; margin-left:10px;">
+            💖 Support via Stripe
         </button>
     </a>
 </div>
