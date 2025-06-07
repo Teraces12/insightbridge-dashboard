@@ -97,7 +97,7 @@ st.markdown('''
 <div style="text-align: center; padding: 1em;">
     <h1 class="gradient-text">📊 InsightBridge: Health & Poverty Analytics</h1>
     <p style="font-size: 1.2em;">
-        A public dashboard for exploring health disparities across demographics.
+        A public dashboard for exploring health disparities across demographics in Pennsylvania, US.
     </p>
     <p style="font-size: 1.1em; color: #666;">
         Built by <strong>Lebede Ngartera</strong> – Founder of <strong>TeraSystemAI</strong>
@@ -122,9 +122,9 @@ st.markdown('''
             💼 Hire Me on LinkedIn
         </button>
     </a>
-    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH" target="_blank">
         <button style="padding:10px 25px;font-size:16px;background:#e91e63;color:white;border:none;border-radius:5px; margin-left:10px;">
-            💖 Support via Stripe
+            💖 Support This Project via Stripe
         </button>
     </a>
 </div>
