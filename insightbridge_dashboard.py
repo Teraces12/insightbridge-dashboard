@@ -40,6 +40,8 @@ except Exception as e:
     st.stop()
 
 # --- Branding and Landing Section ---
+st.set_page_config(page_title="InsightBridge: Health & Poverty Analytics", layout="wide")
+
 st.markdown('''
 <style>
 body {
@@ -78,7 +80,7 @@ body::before {
   display: inline-block;
   animation: marquee 30s linear infinite;
   font-size: 1.3em;
-  color: #880e4f;
+  color: #ad1457;
   font-weight: bold;
 }
 @keyframes animateGradient {
@@ -124,7 +126,7 @@ st.markdown('''
     </a>
     <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
         <button style="padding:10px 25px;font-size:16px;background:#e91e63;color:white;border:none;border-radius:5px; margin-left:10px;">
-            💖 Support This Project via Stripe
+            💖 Support via Stripe
         </button>
     </a>
 </div>
