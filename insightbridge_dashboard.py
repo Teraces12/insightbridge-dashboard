@@ -96,7 +96,7 @@ st.markdown('''
 
 ---
 
-### 💕 Touch a Heart, Fuel a Mission
+### 🫅 Touch a Heart, Fuel a Mission
 
 This project exists to illuminate health disparities, serve communities, and inspire equity.  
 Your contribution—no matter the amount—directly supports continued research, platform improvement, and actionable insight.
@@ -104,7 +104,7 @@ Your contribution—no matter the amount—directly supports continued research,
 **Your generosity turns data into change. Thank you for making a difference.** 🙏
 ''')
 
-# --- Stripe Support Button ---
+# --- Stripe Support Button (Fallback Included) ---
 st.markdown('''
 <div style="text-align: center; margin-top: 1em;">
     <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
@@ -114,6 +114,9 @@ st.markdown('''
     </a>
 </div>
 ''', unsafe_allow_html=True)
+
+# Optional plain text fallback for environments that don't support HTML buttons
+st.markdown('[💖 Click here to support this project via Stripe](https://buy.stripe.com/3cI9AS11N67I3W66IH04801)', unsafe_allow_html=True)
 
 
 # Dashboard Title
