@@ -53,110 +53,108 @@ except Exception as e:
     st.error(f"❌ Data loading failed: {e}")
     st.stop()
 
-# --- Branding and Landing Section ---
-st.set_page_config(page_title="InsightBridge: Health & Poverty Analytics", layout="wide")
-
+# --- Personal Branding Footer ---
 st.markdown('''
-<style>
-body {
-  background-image: url("https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/background.png");
-  background-size: cover;
-  background-attachment: fixed;
-  margin: 0;
-  padding: 0;
-}
-body::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(255, 255, 255, 0.85);
-  z-index: -1;
-}
-.gradient-text {
-  background: linear-gradient(270deg, #42a5f5, #66bb6a, #ffa726, #ab47bc);
-  background-size: 800% 800%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: animateGradient 6s ease infinite;
-  font-weight: bold;
-  font-size: 3em;
-  display: block;
-  text-align: center;
-  width: 100%;
-}
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  box-sizing: border-box;
-  margin-top: 1em;
-  text-align: center;
-}
-.marquee-text {
-  display: inline-block;
-  animation: marquee 30s linear infinite;
-  font-size: 1.3em;
-  color: #ad1457;
-  font-weight: bold;
-}
-@keyframes animateGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-@keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-</style>
-<div class="gradient-text">InsightBridge: Health & Poverty Analytics</div>
-<p style="text-align:center; margin-top: 0.5em; font-size: 1.1em;">A public dashboard for exploring health disparities across demographics in Pennsylvania, US.</p>
-<p style="text-align:center; font-size: 1em;">Built by <strong>Lebede Ngartera</strong> – Founder of <a href="https://www.terasystems.ai" target="_blank">TeraSystemAI</a></p>
-<div class="marquee-container">
-  <div class="marquee-text">💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖</div>
+---
+
+### 👤 Dr. **Lebede Ngartera**  
+**Independent Researcher, Upper Darby, United States**  
+**Founder, [TeraSystemAI](https://www.terasystems.ai)**  
+🧠 *AI & Data Strategist | Ph.D. in Mathematics*  
+🔍 *NLP, ML & LLMs Expert | Turning Data into Insight & Automation* 
+
+💡 *This project is free and publicly available to empower better understanding of community health challenges.*  
+🙏 *Your support—whether through collaboration, partnership, funding, or sharing—is invaluable to our mission.*
+
+**📬 Connect With Me:**  
+- [🔗 LinkedIn](https://www.linkedin.com/in/lebede-ngartera-82429343/)  
+- [🔬 ResearchGate](https://www.researchgate.net/profile/L-Ngartera?ev=hdr_xprf)  
+- [💻 GitHub](https://github.com/Teraces12/skills-introduction-to-github)
+
+📩 *Open to collaborations, consulting, funding, academic exchange, or job opportunities.*
+
+---
+
+### 🫅 Touch a Heart, Fuel a Mission
+
+This project exists to illuminate health disparities, serve communities, and inspire equity.  
+Your contribution—no matter the amount—directly supports continued research, platform improvement, and actionable insight.
+
+**Your generosity turns data into change. Thank you for making a difference.** 🙏
+
+---
+
+### 📊 InsightBridge: Health & Poverty Analytics
+
+A public dashboard for exploring health disparities across demographics in Pennsylvania and beyond.  
+Built by **Dr. Lebede Ngartera**, Founder of [TeraSystemAI](https://www.terasystems.ai)
+
+---
+
+## 🚀 Live Demo
+
+🔗 [Launch the Dashboard](https://share.streamlit.io/your-streamlit-app-link-here)
+
+## 🎯 Purpose
+
+This tool is designed to:
+
+- Explore **health inequities** through accessible visualizations.
+- Provide **data-driven insights** to communities, policymakers, and researchers.
+- Support public awareness and inspire **targeted action** toward equity.
+
+---
+
+## 🛠 Features
+
+- 📈 Interactive trend and group comparison charts
+- 🧑‍🤝‍🧑 Filters by sex and race/ethnicity
+- 📦 Metrics like:
+  - Age-adjusted diabetes hospitalization rate
+  - Asthma-related ED visits
+  - Preventable hypertension and heart failure data
+  - Age distribution, poverty, unemployment
+
+---
+
+## 📎 How to Use
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/Teraces12/insightbridge-dashboard.git
+   cd insightbridge-dashboard
+   ```
+
+---
+
+## 📜 Functions Used in This App
+
+```python
+@st.cache_data(show_spinner=False)
+def load_data():
+    # Loads and filters the dataset
+    pass
+
+# Constants used in the dashboard include:
+# - metric
+# - year_range
+# - sex
+# - race
+# - filtered
+# - trend
+```
+''')
+
+# --- Stripe Support Button (Fallback Included) ---
+st.markdown('''
+<div style="text-align: center; margin-top: 1em;">
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
+        <button style="padding:10px 25px;font-size:16px;background:#6772E5;color:white;border:none;border-radius:5px;">
+            💖 Support This Project via Stripe
+        </button>
+    </a>
 </div>
 ''', unsafe_allow_html=True)
 
-st.markdown('''
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.5em;">
-    <div style="
-        padding: 10px 25px;
-        font-size: 16px;
-        background: #f0f0f0;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        font-family: sans-serif;
-        display: flex;
-        align-items: center;">
-        ✉️ lebede@terasystems.ai
-    </div>
-    <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank" style="
-        padding: 10px 25px;
-        font-size: 16px;
-        background: #0A66C2;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        font-family: sans-serif;">
-        💼 Hire Me on LinkedIn
-    </a>
-    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank" style="
-        padding: 10px 25px;
-        font-size: 16px;
-        background: #e91e63;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        text-decoration: none;
-        font-family: sans-serif;">
-        💖 Support via Stripe
-    </a>
-</div>
-''', unsafe_allow_html=True)
-
-st.title("📊 InsightBridge: Health Trends Dashboard")
-
-...
+# Optional plain text fallback for environments that don't support HTML buttons
+st.markdown('[💖 Click here to support this project via Stripe](https://buy.stripe.com/3cI9AS11N67I3W66IH04801)', unsafe_allow_html=True)
