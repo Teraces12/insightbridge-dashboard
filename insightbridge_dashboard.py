@@ -67,14 +67,18 @@ body::before {
   font-size: 3em;
   display: inline-block;
 }
-.marquee-text {
+.marquee-container {
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   box-sizing: border-box;
-  animation: marquee 25s linear infinite;
+  margin-top: 1em;
+}
+.marquee-text {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
   font-size: 1.3em;
   color: #880e4f;
-  margin-top: 1em;
   font-weight: bold;
 }
 @keyframes animateGradient {
@@ -98,8 +102,10 @@ st.markdown('''
     <p style="font-size: 1.1em; color: #666;">
         Built by <strong>Lebede Ngartera</strong> – Founder of <strong>TeraSystemAI</strong>
     </p>
-    <div class="marquee-text">
-        💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖
+    <div class="marquee-container">
+        <div class="marquee-text">
+            💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖
+        </div>
     </div>
 </div>
 ''', unsafe_allow_html=True)
