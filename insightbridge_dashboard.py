@@ -96,26 +96,8 @@ body::before {
 ''', unsafe_allow_html=True)
 
 st.markdown('''
-<div style="text-align: center; padding: 1em;">
-    <h1 class="gradient-text">📊 InsightBridge: Health & Poverty Analytics</h1>
-    <p style="font-size: 1.2em;">
-        A public dashboard for exploring health disparities across demographics in Pennsylvania, US.
-    </p>
-    <p style="font-size: 1.1em; color: #666;">
-        Built by <strong>Lebede Ngartera</strong> – Founder of <strong>TeraSystemAI</strong>
-    </p>
-    <div class="marquee-container">
-        <div class="marquee-text">
-            💡 Empowering communities with data. Advancing equity through insight. Fueling change with your support. 💖
-        </div>
-    </div>
-</div>
-''', unsafe_allow_html=True)
-
-st.markdown('''
-<div style="text-align: center; margin-top: 1.5em;">
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.5em;">
     <a href="mailto:lebede@terasystems.ai" style="
-        display: inline-block;
         padding: 10px 25px;
         font-size: 16px;
         background: #0072C6;
@@ -127,7 +109,6 @@ st.markdown('''
         📬 Contact Me
     </a>
     <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank" style="
-        display: inline-block;
         padding: 10px 25px;
         font-size: 16px;
         background: #0A66C2;
@@ -135,12 +116,10 @@ st.markdown('''
         border: none;
         border-radius: 5px;
         text-decoration: none;
-        font-family: sans-serif;
-        margin-left: 10px;">
+        font-family: sans-serif;">
         💼 Hire Me on LinkedIn
     </a>
     <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank" style="
-        display: inline-block;
         padding: 10px 25px;
         font-size: 16px;
         background: #e91e63;
@@ -148,8 +127,7 @@ st.markdown('''
         border: none;
         border-radius: 5px;
         text-decoration: none;
-        font-family: sans-serif;
-        margin-left: 10px;">
+        font-family: sans-serif;">
         💖 Support via Stripe
     </a>
 </div>
