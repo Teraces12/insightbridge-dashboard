@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import streamlit as st
 
 # Load your dataset
 @st.cache_data(show_spinner=False)
