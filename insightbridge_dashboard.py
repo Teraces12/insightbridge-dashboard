@@ -95,10 +95,7 @@ st.markdown('''
 📩 *Open to collaborations, consulting, funding, academic exchange, or job opportunities.*
 
 ---
-''', unsafe_allow_html=True)
 
-# --- Touch Heart Fund Message ---
-st.markdown('''
 ### 💕 Touch a Heart, Fuel a Mission
 
 This project exists to illuminate health disparities, serve communities, and inspire equity.  
