@@ -114,23 +114,47 @@ st.markdown('''
 
 st.markdown('''
 <div style="text-align: center; margin-top: 1.5em;">
-    <a href="mailto:lebede@terasystems.ai">
-        <button style="padding:10px 25px;font-size:16px;background:#0072C6;color:white;border:none;border-radius:5px;">
-            📬 Contact Me
-        </button>
+    <a href="mailto:lebede@terasystems.ai" style="
+        display: inline-block;
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #0072C6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;">
+        📬 Contact Me
     </a>
-    <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank">
-        <button style="padding:10px 25px;font-size:16px;background:#0A66C2;color:white;border:none;border-radius:5px; margin-left:10px;">
-            💼 Hire Me on LinkedIn
-        </button>
+    <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank" style="
+        display: inline-block;
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #0A66C2;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;
+        margin-left: 10px;">
+        💼 Hire Me on LinkedIn
     </a>
-    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank">
-        <button style="padding:10px 25px;font-size:16px;background:#e91e63;color:white;border:none;border-radius:5px; margin-left:10px;">
-            💖 Support via Stripe
-        </button>
+    <a href="https://buy.stripe.com/3cI9AS11N67I3W66IH04801" target="_blank" style="
+        display: inline-block;
+        padding: 10px 25px;
+        font-size: 16px;
+        background: #e91e63;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: sans-serif;
+        margin-left: 10px;">
+        💖 Support via Stripe
     </a>
 </div>
 ''', unsafe_allow_html=True)
+
 
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
