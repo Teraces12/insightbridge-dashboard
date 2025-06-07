@@ -2,6 +2,20 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Inject Google Analytics tracking
+GA_MEASUREMENT_ID = "G-578HGNZ4F5"
+
+st.markdown(f"""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', '{GA_MEASUREMENT_ID}');
+</script>
+""", unsafe_allow_html=True)
+
 # Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
