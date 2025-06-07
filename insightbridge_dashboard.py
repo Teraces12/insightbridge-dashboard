@@ -16,6 +16,18 @@ st.markdown(f"""
 </script>
 """, unsafe_allow_html=True)
 
+# Sidebar for Functions Overview
+st.sidebar.title("🧠 Functions Overview")
+st.sidebar.markdown("""
+- `load_data()`: Load and preprocess the dataset
+- `metric`: Selected health indicator
+- `year_range`: Available years in the dataset
+- `sex`: Gender filter
+- `race`: Race/ethnicity filter
+- `filtered`: Filtered data by metric, sex, and race
+- `trend`: Aggregated data for visual trends
+""")
+
 # Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
