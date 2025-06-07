@@ -27,6 +27,7 @@ st.sidebar.markdown("""
 # Load your dataset
 @st.cache_data(show_spinner=False)
 def load_data():
+    """Load and clean the dataset from the online CSV source."""
     file_path = "https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/health_of_the_city.csv"
     try:
         df = pd.read_csv(file_path)
@@ -52,6 +53,7 @@ def load_data():
     return df
 
 def initialize_dashboard():
+    """Load the dataset and render the dashboard visuals."""
     try:
         df = load_data()
         if df is None or df.empty:
@@ -61,8 +63,8 @@ def initialize_dashboard():
         st.error(f"❌ Data loading failed: {e}")
         st.stop()
 
-
 def render_footer():
+    """Render the branding footer with links and call to action."""
     st.markdown('''
 ---
 
@@ -141,15 +143,15 @@ This tool is designed to:
 ```python
 @st.cache_data(show_spinner=False)
 def load_data():
-    # Loads and filters the dataset
+    """Load and preprocess dataset from source."""
     pass
 
 def initialize_dashboard():
-    # Load data and handle UI
+    """Load data and render Streamlit dashboard."""
     pass
 
 def render_footer():
-    # Footer with links and project info
+    """Display footer with contact and mission info."""
     pass
 ```
 ''')
