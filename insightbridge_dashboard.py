@@ -114,7 +114,7 @@ st.markdown('''
 
 st.markdown('''
 <div style="text-align: center; margin-top: 1.5em;">
-    <a href="mailto:lebede@terasystems.ai" target="_blank">
+    <a href="mailto:lebede@terasystems.ai">
         <button style="padding:10px 25px;font-size:16px;background:#0072C6;color:white;border:none;border-radius:5px;">
             📬 Contact Me
         </button>
