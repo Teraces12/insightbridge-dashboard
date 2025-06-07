@@ -132,11 +132,16 @@ st.markdown('''
 
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
-metric_options = sorted(df['metric_name'].dropna().unique())
-preferred_metric = "age_adjusted_mortality_rate_per_100k"
-if preferred_metric in metric_options:
-    metric_options.remove(preferred_metric)
-    metric_options.insert(0, preferred_metric)
+metric_order = [
+    "age_adjusted_mortality_rate_per_100k",
+    "asthma_related_ED_visits_rate_per_10k",
+    "count_annual_shooting_victims",
+    "years_of_potential_life_lost_to_age_75",
+    "count_syphilis_cases"
+]
+
+metric_options = sorted(df['metric_name'].dropna().unique(), key=lambda x: (metric_order.index(x) if x in metric_order else len(metric_order), x))
+
 metric = st.selectbox("Select a Metric:", metric_options)
 
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
