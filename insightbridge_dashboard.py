@@ -106,17 +106,18 @@ body::before {
 
 st.markdown('''
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.5em;">
-    <a href="mailto:lebede@terasystems.ai" style="
+    <div style="
         padding: 10px 25px;
         font-size: 16px;
-        background: #0072C6;
-        color: white;
+        background: #f0f0f0;
+        color: #333;
         border: none;
         border-radius: 5px;
-        text-decoration: none;
-        font-family: sans-serif;">
-        📬 Contact Me
-    </a>
+        font-family: sans-serif;
+        display: flex;
+        align-items: center;">
+        ✉️ lebede@terasystems.ai
+    </div>
     <a href="https://www.linkedin.com/in/lebede-ngartera-82429343/" target="_blank" style="
         padding: 10px 25px;
         font-size: 16px;
@@ -144,70 +145,4 @@ st.markdown('''
 
 st.title("📊 InsightBridge: Health Trends Dashboard")
 
-metric_order = [
-    "age_adjusted_mortality_rate_per_100k",
-    "asthma_related_ED_visits_rate_per_10k",
-    "count_annual_shooting_victims",
-    "years_of_potential_life_lost_to_age_75",
-    "count_syphilis_cases"
-]
-
-metric_options = sorted(df['metric_name'].dropna().unique(), key=lambda x: (metric_order.index(x) if x in metric_order else len(metric_order), x))
-
-metric = st.selectbox("Select a Metric:", metric_options)
-
-year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
-
-sex_options = sorted(df['sex'].dropna().unique())
-sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
-
-race_options = sorted(df['race_ethnicity'].dropna().unique())
-race = st.selectbox("Select Race/Ethnicity:", race_options if race_options else ["All"])
-
-filtered = df[df['metric_name'] == metric]
-filtered = filtered[filtered['metric_value'].notna() & (filtered['metric_value'] > 0)]
-
-trend = filtered.groupby('year')['metric_value'].mean().reset_index()
-
-st.write("📊 Trend Preview:", trend)
-
-year_window = sorted([int(year) for year in trend['year'].dropna().unique() if 2019 <= year <= 2022])
-
-if year_window:
-    if len(year_window) > 1:
-        st.info(f"📊 Showing group comparisons for {metric.replace('_', ' ')} from {min(year_window)} to {max(year_window)}.")
-    else:
-        st.info(f"ℹ️ Showing group comparisons for {metric.replace('_', ' ')} in {year_window[0]} only (no additional years from 2019–2022).")
-
-    for year in year_window:
-        yearly_data = filtered[filtered['year'] == year]
-        comparison_data = yearly_data.groupby(['sex', 'race_ethnicity'])['metric_value'].mean().reset_index()
-        comparison_data['Group'] = comparison_data['sex'] + " | " + comparison_data['race_ethnicity']
-        comparison_data = comparison_data.sort_values(by='metric_value')
-
-        st.subheader(f"📊 Group Comparison - {year}")
-        fig, ax = plt.subplots(figsize=(9, len(comparison_data) * 0.4))
-        bars = ax.barh(comparison_data['Group'], comparison_data['metric_value'], color='steelblue')
-        for bar in bars:
-            width = bar.get_width()
-            ax.text(width + 0.5, bar.get_y() + bar.get_height() / 2, f'{width:.1f}', va='center')
-        ax.set_xlabel("Metric Value")
-        ax.set_ylabel("Demographic Group")
-        ax.set_title(f"{metric.replace('_', ' ').title()} in {year}")
-        st.pyplot(fig)
-
-        csv = comparison_data.to_csv(index=False).encode('utf-8')
-        st.download_button(f"⬇️ Download Comparison {year}", data=csv, file_name=f"group_comparison_{year}.csv", mime="text/csv")
-else:
-    st.subheader("📈 Yearly Trend (Bar Chart)")
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.barh(trend['year'].astype(str), trend['metric_value'], color='mediumseagreen')
-    ax.set_xlabel("Metric Value")
-    ax.set_ylabel("Year")
-    ax.set_title(f"{metric.replace('_', ' ').title()} - Yearly Averages")
-    ax.invert_yaxis()
-    st.pyplot(fig)
-
-    csv = trend.to_csv(index=False).encode('utf-8')
-    st.download_button("⬇️ Download Trend Data as CSV", data=csv, file_name="trend_data.csv", mime="text/csv")
+...
