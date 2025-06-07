@@ -67,7 +67,7 @@ body::before {
   animation: animateGradient 6s ease infinite;
   font-weight: bold;
   font-size: 3em;
-  display: inline-block;
+  display: block;
   text-align: center;
   width: 100%;
 }
