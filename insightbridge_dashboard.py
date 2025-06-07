@@ -46,19 +46,30 @@ body {
   background-image: url("https://raw.githubusercontent.com/Teraces12/insightbridge-dashboard/main/background.png");
   background-size: cover;
   background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: -1;
 }
 .gradient-text {
-  background: linear-gradient(to right, #42a5f5, #66bb6a, #ffa726);
+  background: linear-gradient(270deg, #42a5f5, #66bb6a, #ffa726, #42a5f5);
+  background-size: 800% 800%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: animate 4s ease-in-out infinite;
+  animation: animateGradient 6s ease infinite;
   font-weight: bold;
-  font-size: 36px;
+  font-size: 3em;
   display: inline-block;
 }
-@keyframes animate {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
+@keyframes animateGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 </style>
@@ -97,7 +108,7 @@ metric_options = sorted(df['metric_name'].dropna().unique())
 metric = st.selectbox("Select a Metric:", metric_options)
 
 year_range = df[df['metric_name'] == metric]['year'].dropna().unique()
-st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))})")
+st.caption(f"🗓️ Available Years: {', '.join(map(str, sorted(year_range)))}")
 
 sex_options = sorted(df['sex'].dropna().unique())
 sex = st.selectbox("Select Sex:", sex_options if sex_options else ["All"])
